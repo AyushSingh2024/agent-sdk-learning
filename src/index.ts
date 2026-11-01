@@ -1,9 +1,21 @@
-import { Agent, AgentBuilder } from './app/agent.js'
+import { Agent } from './app/agent.js'
 
-async function init() {
-    const agent: Agent = Agent.builder().setInstructions(`you are an expert math agent`).build()
+async function main() {
+    const agent = Agent.builder()
+        .setInstructions('You are an expert math agent.')
+        .build()
 
-    agent.run('hey, how are you?')
+    const result = await agent.run('What is 12 multiplied by 8?')
+
+    console.log(result)
 }
 
-init()
+main().catch((error: unknown) => {
+    if (error instanceof Error) {
+        console.error(error.message)
+    } else {
+        console.error('An unexpected error occurred', error)
+    }
+
+    process.exitCode = 1
+})

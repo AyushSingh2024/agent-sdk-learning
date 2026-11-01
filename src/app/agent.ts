@@ -1,24 +1,37 @@
 export class AgentBuilder {
-    private instrustions: string | undefined
+    private instructions: string = ''
 
 
-    public setInstructions(instruction: string) {
-        this.instrustions = instruction
+    public setInstructions(instructions: string): this {
+        this.instructions = instructions
         return this
     }
 
-    public build() {
-        return new Agent(this)
+    public build(): Agent {
+        if (!this.instructions.trim()) {
+            throw new Error('Agent instructions cannot be empty')
+        }
+
+        return new Agent(this.instructions)
     }
 }
 
 export class Agent {
-    constructor(builder: AgentBuilder) { }
-    static builder() {
+    private readonly instructions: string
+
+    constructor(instructions: string) {
+        this.instructions = instructions
+    }
+    public static builder(): AgentBuilder {
         return new AgentBuilder()
     }
 
-    public async run(query: string) {
-        console.log(`this is the function to run agent `, query)
+    public async run(query: string): Promise<string> {
+
+        if (!query.trim()) {
+            throw new Error(`Query cannot be empty`)
+        }
+
+        return `Instructions: ${this.instructions} \nQuery: ${query}`
     }
 }
